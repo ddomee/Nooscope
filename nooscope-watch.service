@@ -1,0 +1,18 @@
+[Unit]
+Description=Nooscope incremental file watcher for memory-vault-iris
+After=network.target docker.service
+Requires=docker.service
+RequiresMountsFor=/home/ddomee
+
+[Service]
+Type=simple
+User=ddomee
+Group=ddomee
+Environment=HOME=/home/ddomee
+Environment=NOOSCOPE_CONFIG=/home/ddomee/AI-AGENTS/IRIS/nooscope/nooscope.yaml
+ExecStart=/home/ddomee/AI-AGENTS/IRIS/nooscope/.venv/bin/nooscope watch
+Restart=on-failure
+RestartSec=10
+
+[Install]
+WantedBy=multi-user.target

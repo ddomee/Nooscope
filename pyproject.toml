@@ -10,7 +10,7 @@ dependencies = [
     "watchdog",
     "pyyaml",
     "python-frontmatter",
-    "mcp",
+    "mcp<2",
     "httpx",
     "numpy",
 ]

@@ -68,6 +68,34 @@ class VaultEventHandler(FileSystemEventHandler):
             except Exception as exc:
                 log.error("Error flushing log entries: %s", exc)
 
+    def on_moved(self, event) -> None:
+        """Reindex the destination of a moved/renamed file and drop the old path.
+
+        Handles both a genuine rename of a tracked note and an atomic-save
+        temp-file-then-rename pattern (the temp name won't end in ``.md``, so
+        only the destination branch fires in that case).
+
+        Args:
+            event: Watchdog ``FileMovedEvent``.
+        """
+        if event.is_directory:
+            return
+        ignore_patterns = getattr(
+            next((v for v in self.config.vaults if v.path == self.vault_root), None),
+            "ignore", []
+        )
+        src_rel = self._rel(event.src_path)
+        dest_rel = self._rel(event.dest_path)
+        if event.src_path.endswith(".md") and not is_ignored(src_rel, ignore_patterns):
+            log.info("Moved from: %s", src_rel)
+            delete_document_by_path(self.conn, self.vault_id, src_rel)
+        if event.dest_path.endswith(".md") and not is_ignored(dest_rel, ignore_patterns):
+            log.info("Moved to: %s", dest_rel)
+            try:
+                index_file(self.conn, self.vault_id, event.dest_path, self.vault_root, self.backends, self.config)
+            except Exception as exc:
+                log.error("Error indexing %s: %s", event.dest_path, exc)
+
     def on_modified(self, event) -> None:
         """Reindex a modified markdown file.
 
