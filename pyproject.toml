@@ -20,6 +20,7 @@ apple = ["pyobjc-framework-NaturalLanguage"]
 mlx = ["mlx-lm"]
 openai = ["openai"]
 calendar = ["pyobjc-framework-EventKit", "anthropic"]
+dev = ["pytest", "pytest-cov"]
 
 [project.scripts]
 nooscope = "nooscope.cli:main"

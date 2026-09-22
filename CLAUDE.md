@@ -131,7 +131,7 @@ Vault (markdown folder) → nooscope-watcher (watchdog/fsevents) → .nooscope/n
 | `write_note` | Create or overwrite a note at an explicit vault-relative path |
 | `log_thought` | Append a log bullet to today's daily note |
 | `rebuild` | Full vault reindex |
-| `generate_vault_layout` | Scan vault and write `References/VaultLayout.md`; also reloads MCP server instructions |
+| `generate_vault_layout` | Scan vault and write `05 - Resources/Vault Layout.md`; also reloads MCP server instructions |
 
 ### Capture queue design
 
